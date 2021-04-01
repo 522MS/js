@@ -100,17 +100,13 @@
         function mathOperation(arg1, arg2, operation) {
             switch (operation) {
                 case ('сложение'):
-                    console.log(addition(arg1, arg2))
-                    break
+                    return addition(arg1, arg2)
                 case ('вычетание'):
-                    console.log(subtraction(arg1, arg2))
-                    break
+                    return subtraction(arg1, arg2)
                 case ('умножение'):
-                    console.log(multiplication(arg1, arg2))
-                    break
+                    return multiplication(arg1, arg2)
                 case ('деление'):
-                    console.log(division(arg1, arg2))
-                    break
+                    return division(arg1, arg2)
                 default:
                     console.log('Ошибка')
             }
