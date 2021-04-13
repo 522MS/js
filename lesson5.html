@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <table id="chess"></table>
+    <div class="good-list"></div>
+    <div id="catalog"></div>
+    <script>
+        'use script'
+
+        // Проверьте пожалуйста предыдущую работу,я её исправил.
+
+        // 1. Создать функцию, генерирующую шахматную доску.При этом можно использовать любые html - теги по своему
+        //    желанию.Доска должна быть разлинована соответствующим образом, т.е.чередовать черные и белые ячейки.
+        //    Строки должны нумероваться числами от 1 до 8, столбцы – латинскими буквами A, B, C, D, E, F, G, H.
+        // 2*. Заполнить созданную таблицу буквами, отвечающими за шахматную фигуру, например К – король, Ф – ферзь и т.п.,
+        const settings = {
+            rowCount: 8,
+            colCount: 8,
+        }
+
+        function CreateTable() {
+            let containerElement = document.getElementById('chess');
+            containerElement.style.borderCollapse = 'collapse'
+            containerElement.innerHTML = ''
+
+            for (let row = 0; row < settings.rowCount; row++) {
+                const trElem = document.createElement('tr');
+                trElem.style.width = '50px'
+                trElem.style.height = '50px'
+
+                containerElement.appendChild(trElem);
+                for (let col = 0; col < settings.colCount; col++) {
+                    const tdElem = document.createElement('td');
+
+                    tdElem.style.width = '50px'
+                    tdElem.style.height = '50px'
+                    tdElem.style.backgroundColor = 'white'
+                    tdElem.style.border = '1px solid #888';
+                    if (row % 2 === 0 && col % 2 !== 0 || row % 2 !== 0 & col % 2 === 0) {
+                        tdElem.style.backgroundColor = 'black'
+                    }
+                    trElem.appendChild(tdElem);
+                }
+            }
+            let a = 9
+            for (let i = 0; i < 64; i += 8) {
+                a--
+                let firstTd = document.querySelectorAll('td')[i]
+                firstTd.insertAdjacentHTML('beforebegin', `<p style="text-align: center; font-size: 36px;margin:auto">${a}</p>`)
+            }
+            const tdPosition = document.querySelectorAll('td')
+
+            for (let position = 0; position < 64; position++) {
+                if (position === 16) { position = 48 }
+                switch (position) {
+                    case 0:
+                    case 7:
+                    case 56:
+                    case 63:
+                        tdPosition[position].innerHTML = '<p style="color: red; text-align:center">Л</p>'
+                        break
+                    case 1:
+                    case 6:
+                    case 57:
+                    case 62:
+                        tdPosition[position].innerHTML = '<p style="color: red; text-align:center">Кн</p>'
+                        break
+                    case 2:
+                    case 5:
+                    case 58:
+                    case 61:
+                        tdPosition[position].innerHTML = '<p style="color: red; text-align:center">С</p>'
+                        break
+                    case 3:
+                    case 59:
+                        tdPosition[position].innerHTML = '<p style="color: red; text-align:center">Ф</p>'
+                        break
+                    case 4:
+                    case 60:
+                        tdPosition[position].innerHTML = '<p style="color: red; text-align:center">К</p>'
+                        break
+                    default:
+                        tdPosition[position].innerHTML = '<p style="color: red; text-align:center">П</p>'
+
+                }
+            }
+        }
+
+        CreateTable()
+
+
+
+        // 3. Сделать генерацию корзины динамической: верстка корзины не должна находиться в HTML - структуре.
+        //    Там должен быть только div, в который будет вставляться корзина, сгенерированная на базе JS:
+        // 3.1. Пустая корзина должна выводить строку «Корзина пуста»;
+        // 3.2. Наполненная должна выводить «В корзине: n товаров на сумму m рублей».
+
+        const basket = {
+            goods: [
+                {
+                    product: 'Яблоки',
+                    price: 70,
+                    quantity: 30
+                },
+                {
+                    product: 'Апельсины',
+                    price: 110,
+                    quantity: 15
+                },
+                {
+                    product: 'Груши',
+                    price: 90,
+                    quantity: 17
+                }
+            ],
+
+            summBasket() {
+                return this.goods.reduce((totalPrice, cartItem) => totalPrice + cartItem.price * cartItem.quantity, 0);
+            },
+
+            quantityGoodsBasket() {
+                return this.goods.reduce((totalQuantity, cartItem) => totalQuantity + cartItem.quantity, 0)
+            }
+        }
+
+        let goodsBlock = document.querySelector('.good-list')
+        if (basket.quantityGoodsBasket() === 0) {
+            goodsBlock.innerHTML = 'Корзина пуста'
+        } else {
+            goodsBlock.innerHTML = `В корзине: ${basket.quantityGoodsBasket()} товаров на сумму ${basket.summBasket()} рублей`
+        }
+
+        // 4*. Сделать так, чтобы товары в каталоге выводились при помощи JS:
+        // 4.1. Создать массив товаров (сущность Product);
+        // 4.2. При загрузке страницы на базе данного массива генерировать вывод из него.
+        // HTML-код должен содержать только div id=”catalog” без вложенного кода. Весь вид каталога генерируется JS.
+
+        const products = [
+            {
+                product: 'Яблоки',
+                price: 70,
+            },
+            {
+                product: 'Апельсины',
+                price: 110,
+            },
+            {
+                product: 'Груши',
+                price: 90,
+            },
+            {
+                product: 'Бананы',
+                price: 50,
+            },
+            {
+                product: 'Мандарины',
+                price: 85,
+            }
+        ]
+
+        const productsBlock = document.getElementById('catalog')
+
+        let HTMLString = ''
+        let a = 0
+        products.forEach((good) => {
+            HTMLString += `<div>
+                               <div>${a + 1}. ${good.product} - ${good.price} рублей</div>
+                           </div>`
+            a++
+        })
+
+        productsBlock.innerHTML = `Каталог продуктов: \n${HTMLString}`
+
+    </script>
+</body>
+
+</html>
